@@ -35,6 +35,7 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t ecs-api .
+        working-directory: ./src
       
       - name: Push Docker image to ECR
         run: 
