@@ -1,0 +1,57 @@
+name: Build & Publish ECR
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '23'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run build
+        run: npm run build
+      
+      # - name: Run Tests
+      #   run: npm run build
+
+      # - name: Run Lint
+      #   run: npm run build
+
+      - name: Build Docker image
+        run: docker build -t ecs-api .
+      
+      - name: Push Docker image to ECR
+        run: 
+          |
+            echo "Push to ECR"
+      
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.11.2
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Terraform validate
+        run: terraform validate
+        working-directory: ./terraform
+      
+      # - name: Terraform Plan
+      #   run: terraform plan
+      #   working-directory: ./terraform
