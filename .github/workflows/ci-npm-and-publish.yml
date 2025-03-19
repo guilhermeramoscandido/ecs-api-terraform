@@ -37,6 +37,25 @@ jobs:
         run: docker build -t ecs-api .
         working-directory: ./src
       
+      - name: Docker run
+        run: docker run -p 3000:3000 'ecs-api:${{ github.sha }}'
+        working-directory: ./src
+      
+      - name: Test Docker image
+        run: |
+          echo "Test Docker image"
+          curl -X GET -H "Content-Type: application/json" http://localhost:3000/current_time?name=some_name
+
+      - name: Setup Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: 'ecs-api:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
       - name: Push Docker image to ECR
         run: 
           |
