@@ -34,7 +34,7 @@ jobs:
       #   run: npm run build
 
       - name: Build Docker image
-        run: docker build -t ecs-api .
+        run: docker build -t 'ecs-api:${{ github.sha }}' .
         working-directory: ./src
       
       - name: Docker run
