@@ -49,11 +49,11 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./terraform
+        working-directory: ./infra
 
       - name: Terraform validate
         run: terraform validate
-        working-directory: ./terraform
+        working-directory: ./infra
       
       # - name: Terraform Plan
       #   run: terraform plan
